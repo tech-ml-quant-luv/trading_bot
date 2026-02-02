@@ -1,0 +1,3 @@
+{"level":"DEBUG","location":"[get_call:158] fyersModel","message":{"Status Code":200,"API":"/history"},"timestamp":"2026-02-02 09:53:23,799+0530","service":"FyersAPIRequest","taskName":"Task-40"}
+{"level":"DEBUG","location":"[get_call:158] fyersModel","message":{"Status Code":200,"API":"/history"},"timestamp":"2026-02-02 10:11:12,742+0530","service":"FyersAPIRequest","taskName":"Task-331"}
+{"level":"DEBUG","location":"[get_call:158] fyersModel","message":{"Status Code":200,"API":"/history"},"timestamp":"2026-02-02 10:11:44,653+0530","service":"FyersAPIRequest","taskName":"Task-367"}
