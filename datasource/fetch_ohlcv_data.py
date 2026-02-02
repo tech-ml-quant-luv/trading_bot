@@ -22,7 +22,8 @@ def create_data_range(lookback_period):
     return ranges
 
 def fetch_data():
-    access_token = input("Enter access token")
+    # access_token = input("Enter access token")
+    access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIl0sImF0X2hhc2giOiJnQUFBQUFCcGdIU2dMc2t3XzhLUWZCS1R1VWFXSEZsWE1DV0tkaUNlOUYtd3Jwd2tORk1JQ3BsWG5yTkVCcGJwbktKNy0tVGxRbGEyRXAxd2VkbkJmLVdYR0R6OFkxX19JVlVSZk5tMUxTVmpMbGNWWVFQb1JvYz0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiJiMjM2ZDk2Mjg3YzdkYjI0NzdmOTE0Y2FhZWQ5Y2YwZTNmYTAxYzQxMzgzMWIxMmMxYjRhYjlhYyIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEwwMDcyMSIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzcwMDc4NjAwLCJpYXQiOjE3NzAwMjYxNDQsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3MDAyNjE0NCwic3ViIjoiYWNjZXNzX3Rva2VuIn0.JO3WOwcpRlSvGpsE11NGEC8SMeir4nwjKuKBqVh5yqw"
     fyers = fyersModel.FyersModel(client_id=client_id, is_async=False, token=access_token, log_path="")
     ranges = create_data_range(LOOKBACK_PERIOD)
     data = {

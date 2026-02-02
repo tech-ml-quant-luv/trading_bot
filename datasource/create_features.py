@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv("./demo_data.csv").set_index("datetime")
-data.index = pd.to_datetime(data.index)
-data.head()
+# data = pd.read_csv("./demo_data.csv").set_index("datetime")
+# data.index = pd.to_datetime(data.index)
+# data.head()
 
 def create_features(df):
 
