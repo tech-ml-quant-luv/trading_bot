@@ -37,12 +37,12 @@ def fetch_data():
     return response
 
 
-def fyers_history_to_df(fetch_data_function) -> pd.DataFrame:
+def fyers_history_to_df() -> pd.DataFrame:
     """
     Convert FYERS history API response to a pandas DataFrame.
     Shifts intraday candle timestamps forward by 15 minutes.
     """
-    response = fetch_data_function()
+    response = fetch_data()
 
     if response.get("s") != "ok":
         raise ValueError(f"FYERS API error: {response}")
@@ -71,6 +71,6 @@ def fyers_history_to_df(fetch_data_function) -> pd.DataFrame:
     return df
 
 
-df = fyers_history_to_df(fetch_data)
+# df = fyers_history_to_df()
 
 # df.to_csv("demo_data.csv", index="datetime")
