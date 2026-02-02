@@ -9,7 +9,7 @@ LOOKBACK_PERIOD = 5
 client_id="ALT6RUE1IF-100"
 secret_key="0UT0LW5PE4"
 redirect_uri="https://luvratan.tech/"
-access_token = input("Enter access token")
+
 
 def create_data_range(lookback_period):
     lookback_seconds = lookback_period * 24* 60* 60 #Since fyers api give timestamp in seconds
@@ -22,6 +22,7 @@ def create_data_range(lookback_period):
     return ranges
 
 def fetch_data():
+    access_token = input("Enter access token")
     fyers = fyersModel.FyersModel(client_id=client_id, is_async=False, token=access_token, log_path="")
     ranges = create_data_range(LOOKBACK_PERIOD)
     data = {
@@ -34,7 +35,6 @@ def fetch_data():
     }
     response = fyers.history(data=data)
     return response
-
 
 
 def fyers_history_to_df(fetch_data_function) -> pd.DataFrame:
@@ -73,4 +73,4 @@ def fyers_history_to_df(fetch_data_function) -> pd.DataFrame:
 
 df = fyers_history_to_df(fetch_data)
 
-df.to_csv("demo_data.csv", index="datetime")
+# df.to_csv("demo_data.csv", index="datetime")
