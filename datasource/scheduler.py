@@ -3,6 +3,22 @@ from job_runner import run_pipeline
 
 scheduler = BlockingScheduler(timezone="Asia/Kolkata")
 
+
+#For Monday to Friday add - scheduler.add_job(
+#     run_pipeline,
+#     trigger="cron",
+#     day_of_week="mon-fri",
+#     hour="9-15",
+#     minute="*/5",
+#     second=5,
+#     id="ohlcv_feature_pipeline",
+#     max_instances=1,
+#     coalesce=True,
+#     misfire_grace_time=30,
+#     timezone="Asia/Kolkata"
+# )
+
+
 scheduler.add_job(
     run_pipeline,
     trigger="cron",
