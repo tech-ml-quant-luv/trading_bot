@@ -1,7 +1,8 @@
 from datetime import datetime
-from data.create_features import create_features
+from features.create_features import create_features
 from data.fetch_ohlcv_data import fyers_history_to_df
 from concurrent.futures import ThreadPoolExecutor
+from data.sqlite_store import save_features_df
 
 TICKERS = ["ADANIPORTS", "ICICIBANK", "INFY", "RELIANCE"]
 
@@ -14,7 +15,8 @@ def pipeline_function(ticker):
     final_df = create_features(df)
 
     print(f"{ticker} Latest Row: {final_df.tail(1)}")
-    final_df.to_csv(f"./data/{ticker}.csv", index=False)
+
+    save_features_df(ticker, final_df)
 
     print(f"Job completed at {datetime.now()}")
 
