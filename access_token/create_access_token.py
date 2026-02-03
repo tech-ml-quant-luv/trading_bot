@@ -30,7 +30,7 @@ def generate_token_from_auth_code(auth_code: str):
     token_response = session.generate_token()
     
     # Save to JSON file
-    with open("fyers_token.json", "w") as f:
+    with open("../assets/fyers_token.json", "w") as f:
         json.dump(token_response, f, indent=2)
     
     return token_response
@@ -38,7 +38,7 @@ def generate_token_from_auth_code(auth_code: str):
 def get_token_from_file():
     """Read token from JSON file"""
     try:
-        with open("fyers_token.json", "r") as f:
+        with open("../assets/fyers_token.json", "r") as f:
             return json.load(f)
     except FileNotFoundError:
         return None

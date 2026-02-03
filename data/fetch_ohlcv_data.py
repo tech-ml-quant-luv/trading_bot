@@ -3,7 +3,11 @@ import numpy as np
 import time
 from fyers_apiv3 import fyersModel
 from datetime import datetime, timedelta
+from pathlib import Path
 import json
+
+BASE_DIR = Path(__file__).resolve().parent
+TOKEN_PATH = BASE_DIR / "../assets/fyers_token.json"
 
 RESOLUTION = 5
 LOOKBACK_PERIOD = 5
@@ -13,8 +17,7 @@ redirect_uri="https://luvratan.tech/"
 
 
 def get_access_token():
-    """Load access token from JSON file"""
-    with open("fyers_token.json", "r") as f:
+    with open(TOKEN_PATH, "r") as f:
         token_data = json.load(f)
     return token_data["access_token"]
 

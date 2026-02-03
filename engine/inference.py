@@ -3,6 +3,9 @@ import numpy as np
 from joblib import load
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
+
 # Feature columns (same order as training)
 FEATURE_COLUMNS = [
     'hour', 'session_progress', 'is_early_session', 'is_late_session',
@@ -33,8 +36,10 @@ def load_model(ticker):
         return _model_cache[ticker]
     
     # Updated model path: models/ADANIPORTS_5_XGB.joblib
-    model_path = f"models/{ticker}_{TIMEFRAME_MINUTES}_XGB.joblib"
-    
+    model_path = os.path.join(
+    MODEL_DIR,
+    f"{ticker}_{TIMEFRAME_MINUTES}_XGB.joblib"
+)
     if not os.path.exists(model_path):
         print(f"Warning: Model not found at {model_path}")
         return None
