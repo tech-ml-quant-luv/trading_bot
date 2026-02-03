@@ -1,19 +1,26 @@
-# print(final_df.tail(1))
-# final_df.to_csv("current_data.csv")
-
-
 from datetime import datetime
 from create_features import create_features
 from fetch_ohlcv_data import fyers_history_to_df
+from concurrent.futures import ThreadPoolExecutor
 
-def run_pipeline():
+TICKERS = ["ADANIPORTS", "ICICIBANK", "INFY", "RELIANCE"]
+
+def pipeline_function(ticker):
     start_time = datetime.now()
-    print(f"Job started at {start_time}")
+    print(f"{ticker}Job started at {start_time}")
 
-    df = fyers_history_to_df()
+    #Fetch data for one ticker
+    df = fyers_history_to_df(ticker)
     final_df = create_features(df)
 
-    print(final_df.tail(1))
-    final_df.to_csv("current_data.csv", index=False)
+    print(f"{ticker} Latest Row: {final_df.tail(1)}")
+    final_df.to_csv(f"{ticker}.csv", index=False)
 
     print(f"Job completed at {datetime.now()}")
+
+def run_pipeline():
+    with ThreadPoolExecutor(max_workers=4) as executer:
+        executer.map(pipeline_function, TICKERS)
+
+
+   
