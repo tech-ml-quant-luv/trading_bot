@@ -42,7 +42,6 @@ def load_model(ticker):
     try:
         model = load(model_path)
         _model_cache[ticker] = model
-        print(f"Model loaded successfully: {model_path}")
         return model
     except Exception as e:
         print(f"Error loading model {model_path}: {str(e)}")
@@ -50,47 +49,27 @@ def load_model(ticker):
 
 
 def get_latest_prediction(ticker, final_df):
-    """
-    Get ML prediction for the latest row in final_df
-    
-    Parameters:
-    -----------
-    ticker : str
-        Stock ticker name (e.g., "ADANIPORTS")
-    final_df : pd.DataFrame
-        DataFrame with all features created
-    
-    Returns:
-    --------
-    dict or None : Prediction result with keys:
-        - timestamp
-        - prediction (1 or -1)
-        - confidence (0 to 1)
-        - trade_signal (bool)
-    """
-    
-    # Load model
     model = load_model(ticker)
     if model is None:
         return None
     
-    # Get latest row with all required features
     try:
-        # Extract features for latest row
+        # Extract features
         latest_features = final_df[FEATURE_COLUMNS].iloc[-1:].copy()
         
-        # Check for NaN values
         if latest_features.isnull().any().any():
-            nan_cols = latest_features.columns[latest_features.isnull().any()].tolist()
-            print(f"{ticker}: Latest row has NaN values in {nan_cols}, skipping prediction")
+            print(f"{ticker}: Latest row has NaN values, skipping prediction")
             return None
         
+        # Convert to numpy array to bypass feature name validation
+        X_array = latest_features.values
+        
         # Get prediction
-        y_pred_binary = model.predict(latest_features)[0]
-        y_pred = y_pred_binary * 2 - 1  # Convert 0/1 to -1/1
+        y_pred_binary = model.predict(X_array)[0]
+        y_pred = y_pred_binary * 2 - 1
         
         # Get confidence
-        y_pred_proba = model.predict_proba(latest_features)[0, 1]
+        y_pred_proba = model.predict_proba(X_array)[0, 1]
         
         # Generate trade signal
         trade_signal = (y_pred == 1) and (y_pred_proba >= CONFIDENCE_THRESHOLD)
@@ -109,10 +88,7 @@ def get_latest_prediction(ticker, final_df):
         
     except Exception as e:
         print(f"{ticker}: Error in prediction - {str(e)}")
-        import traceback
-        traceback.print_exc()
         return None
-
 
 def get_batch_predictions(ticker, final_df):
     """

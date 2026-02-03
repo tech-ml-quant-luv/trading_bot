@@ -9,23 +9,26 @@ TICKERS = ["ADANIPORTS", "ICICIBANK", "INFY", "RELIANCE", "HINDALCO"]
 
 
 def pipeline_function(ticker):
-    start_time = datetime.now()
-    print(f"{ticker}, Job started at {start_time}")
+    # start_time = datetime.now()
+    # print(f"{ticker}, Job started at {start_time}")
 
     # Fetch data for one ticker
     df = fyers_history_to_df(ticker)
     final_df = create_features(df)
     
-    # Get ML prediction for latest bar
+    # Get ML prediction for latest bar (this modifies final_df in-place)
     prediction = get_latest_prediction(ticker, final_df)
     
-    if prediction and prediction['trade_signal']:
-        print(f"🟢 {ticker} | TRADE SIGNAL | Confidence: {prediction['confidence']:.2%}")
+    if prediction:
+        print(f"{ticker} | Pred: {prediction['prediction']} | Confidence: {prediction['confidence']:.2%}")
+        
+    else:
+        print(f"🟢 {ticker} | No prediction (model not found or NaN values)")
     
-    # Save features with predictions
+    # Save features with predictions (ml_prediction, ml_confidence, trade_signal columns added)
     save_features_df(ticker, final_df)
 
-    print(f"{ticker}, Job completed at {datetime.now()}")
+    # print(f"{ticker}, Job completed at {datetime.now()}\n")
 
 
 def run_pipeline():
