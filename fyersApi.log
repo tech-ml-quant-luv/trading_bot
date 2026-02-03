@@ -1,0 +1,4 @@
+{"level":"ERROR","location":"[get_call:164] fyersModel","message":{"API":"/history","Error":{"code":-16,"message":"Could not authenticate the user","s":"error"}},"timestamp":"2026-02-03 10:25:06,301+0530","service":"FyersAPI"}
+{"level":"ERROR","location":"[get_call:164] fyersModel","message":{"API":"/history","Error":{"code":-16,"message":"Could not authenticate the user","s":"error"}},"timestamp":"2026-02-03 10:25:06,306+0530","service":"FyersAPI"}
+{"level":"ERROR","location":"[get_call:164] fyersModel","message":{"API":"/history","Error":{"code":-16,"message":"Could not authenticate the user","s":"error"}},"timestamp":"2026-02-03 10:25:06,353+0530","service":"FyersAPI"}
+{"level":"ERROR","location":"[get_call:164] fyersModel","message":{"API":"/history","Error":{"code":-16,"message":"Could not authenticate the user","s":"error"}},"timestamp":"2026-02-03 10:25:06,374+0530","service":"FyersAPI"}
