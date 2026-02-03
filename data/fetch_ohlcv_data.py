@@ -3,12 +3,20 @@ import numpy as np
 import time
 from fyers_apiv3 import fyersModel
 from datetime import datetime, timedelta
+import json
 
 RESOLUTION = 5
 LOOKBACK_PERIOD = 5
 client_id="ALT6RUE1IF-100"
 secret_key="0UT0LW5PE4"
 redirect_uri="https://luvratan.tech/"
+
+
+def get_access_token():
+    """Load access token from JSON file"""
+    with open("fyers_token.json", "r") as f:
+        token_data = json.load(f)
+    return token_data["access_token"]
 
 
 def create_data_range(lookback_period):
@@ -22,9 +30,7 @@ def create_data_range(lookback_period):
     return ranges
 
 def fetch_data(ticker):
-    # access_token = input("Enter access token")
-    access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiZDoxIiwiZDoyIiwieDowIiwieDoxIl0sImF0X2hhc2giOiJnQUFBQUFCcGdZQkpIWUtIZnpEdUllMW9wMkF3NUJZOE53Y2FITzdWYVVlSjVxRFJGc3lOaTVqZDZWXzNZc0NTNWw5dmF2WmRGelBPenoyeV9fcHBHR2lybEF6SnVON2ZCWW1wX2NSVXIwNmRmSHQ4WU9RczRnVT0iLCJkaXNwbGF5X25hbWUiOiIiLCJvbXMiOiJLMSIsImhzbV9rZXkiOiIyMDc4NGJkZTQ4NDliZTdjNmYxZmI4MGM3OWNiNDNmNzJmZTQxMmMyYzA0ZmNjNTUxMWVhZjBlZiIsImlzRGRwaUVuYWJsZWQiOiJOIiwiaXNNdGZFbmFibGVkIjoiTiIsImZ5X2lkIjoiWEwwMDcyMSIsImFwcFR5cGUiOjEwMCwiZXhwIjoxNzcwMTY1MDAwLCJpYXQiOjE3NzAwOTQ2NjUsImlzcyI6ImFwaS5meWVycy5pbiIsIm5iZiI6MTc3MDA5NDY2NSwic3ViIjoiYWNjZXNzX3Rva2VuIn0.GT2ZY46axzp0mSX-bYfcp--UOtapgNzek8mMWjlve0c"
-    
+    access_token = get_access_token()
     fyers = fyersModel.FyersModel(client_id=client_id, is_async=False, token=access_token, log_path="")
     ranges = create_data_range(LOOKBACK_PERIOD)
     data = {

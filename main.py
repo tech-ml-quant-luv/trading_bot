@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return "Welcome to the ultimate trading Bot"
+    return "Welcome to the Ultimate trading Bot"
 
 @app.get("/auth-url")
 def auth_url():
