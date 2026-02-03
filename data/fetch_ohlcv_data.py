@@ -48,7 +48,6 @@ def fyers_history_to_df(ticker) -> pd.DataFrame:
 
     if response.get("s") != "ok":
         raise ValueError(f"FYERS API error: {response}")
-    print(response["candles"])
     df = pd.DataFrame(
         response["candles"],
         columns=["timestamp", "open", "high", "low", "close", "volume"]
