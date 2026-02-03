@@ -8,10 +8,12 @@ DB_PATH = BASE_DIR / "market_data.db"
 def get_connection():
     return sqlite3.connect(DB_PATH, check_same_thread=False)
 
-def save_features_df(ticker,df):
-
+def save_features_df(ticker, df):
     conn = get_connection()
     table_name = f"features_{ticker.lower()}"
+
+    df = df.reset_index()
+
     df.to_sql(
         table_name,
         conn,
@@ -19,6 +21,7 @@ def save_features_df(ticker,df):
         index=False
     )
     conn.close()
+
 
 
 def create_tables():

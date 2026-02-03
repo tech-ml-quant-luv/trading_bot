@@ -71,8 +71,3 @@ def fyers_history_to_df(ticker) -> pd.DataFrame:
     df = df.set_index("datetime")
 
     return df
-
-
-# df = fyers_history_to_df()
-
-# df.to_csv("demo_data.csv", index="datetime")
