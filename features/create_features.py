@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 def create_features(df):
+    df = df.copy()
 
     #Calculate Support and resistance
 
@@ -101,6 +102,7 @@ def create_features(df):
     # Moving averages (just for calculation, not direct features)
     df["5ma"] = df["close"].shift().rolling(5).mean()
     df["10ma"] = df["close"].shift().rolling(10).mean()
+    df["20ma"] = df["close"].shift().rolling(20).mean()
     df["50ma"] = df["close"].shift().rolling(50).mean()
     df["200ma"] = df["close"].shift().rolling(200).mean()  # Fixed: was 100
 

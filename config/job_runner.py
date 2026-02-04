@@ -4,29 +4,44 @@ from data.fetch_ohlcv_data import fyers_history_to_df
 from concurrent.futures import ThreadPoolExecutor
 from data.sqlite_store import save_features_df
 from engine.inference import get_latest_prediction
+from shared_state import update_row
 
 TICKERS = ["ADANIPORTS", "ICICIBANK", "INFY", "RELIANCE", "HINDALCO"]
+columns_required = ['support', 'resistance', 'rsi_14', 'atr', '20ma', '50ma', '200ma']
 
 
 def pipeline_function(ticker):
-    # start_time = datetime.now()
-    # print(f"{ticker}, Job started at {start_time}")
-
     # Fetch data for one ticker
     df = fyers_history_to_df(ticker)
-    final_df = create_features(df)
-    # Get ML prediction for latest bar (this modifies final_df in-place)
+    final_df = create_features(df.copy())
+    
+    # Get ML prediction for latest bar
     prediction = get_latest_prediction(ticker, final_df)
     if prediction:
         print(f"{ticker} | Pred: {prediction['prediction']} | Confidence: {prediction['confidence']:.2%}")
-        
     else:
-        print(f"🟢 {ticker} | No prediction (model not found or NaN values)")
+        print(f"{ticker} | No prediction (model not found or NaN values)")
     
-    # Save features with predictions (ml_prediction, ml_confidence, trade_signal columns added)
+    # Save features with predictions
     save_features_df(ticker, final_df)
-
-    # print(f"{ticker}, Job completed at {datetime.now()}\n")
+    
+    # Prepare last row for shared state
+    last_row = final_df[columns_required].iloc[-1].to_dict()
+    
+    # Add predictions to the dict
+    if prediction:
+        last_row['ml_prediction'] = prediction['prediction']
+        last_row['ml_confidence'] = prediction['confidence']
+    else:
+        last_row['ml_prediction'] = None
+        last_row['ml_confidence'] = None
+    
+    # Add ticker
+    last_row['ticker'] = ticker
+    
+    # Update shared state
+    update_row(ticker, last_row)
+    print(f"{ticker} | Shared state updated")
 
 
 def run_pipeline():
