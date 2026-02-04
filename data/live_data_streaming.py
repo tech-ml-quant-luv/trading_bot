@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from fyers_apiv3.FyersWebsocket import data_ws
 from shared_state import get_row
+from engine.trigger import trigger_long, trigger_short
 
 
 TOKEN_PATH = Path(__file__).resolve().parent.parent / "assets" / "fyers_token.json"
@@ -19,10 +20,37 @@ def get_access_token():
 
 def onmessage(message):
     """Handle incoming messages from WebSocket."""
+    
+    # Handle system messages (authentication, subscription, etc.)
+    if 'symbol' not in message:
+        print(f"System message: {message.get('message', 'Unknown')}")
+        return
+    
     full_symbol = message['symbol']
     ticker = full_symbol.split(':')[1].split('-')[0]  # Extract middle part
     row = get_row(ticker)
-    print(f"{row['ticker']} | {row['ml_prediction']} | {row['ml_confidence']:.2%} | {message['symbol']} | {message['ltp']} | {row['support']} | {row['resistance']}")
+    
+    # Handle cold start - database empty
+    if row is None:
+        print(f"No data available for {ticker} yet. Skipping...")
+        return
+    
+    ltp = message['ltp']
+    support = row['support']
+    resistance = row['resistance']
+    ma20 = row["20ma"]
+    ma50 = row["50ma"]
+    ma200 = row["200ma"]
+    rsi = row["rsi_14"]
+    
+    if ltp <= support:
+        trigger_long(ltp, ma20, ma50, ma200, rsi, ticker)
+    elif ltp >= resistance:
+        trigger_short(ltp, ma20, ma50, ma200, rsi, ticker)
+    else:
+        print("No Trigger yet")
+    
+    print(f"{ticker} | {row['ml_prediction']} | {row['ml_confidence']:.2%} | {ltp} | {support} | {resistance}")
 
 
 def onerror(message):
@@ -40,10 +68,10 @@ def onopen():
     data_type = "SymbolUpdate"
     symbols = [
         'NSE:ADANIPORTS-EQ',
-        # 'NSE:INFY-EQ',
-        # 'NSE:ICICIBANK-EQ',
-        # 'NSE:RELIANCE-EQ',
-        # 'NSE:HINDALCO-EQ'
+        'NSE:INFY-EQ',
+        'NSE:ICICIBANK-EQ',
+        'NSE:RELIANCE-EQ',
+        'NSE:HINDALCO-EQ'
     ]
     fyers.subscribe(symbols=symbols, data_type=data_type)
     fyers.keep_running()

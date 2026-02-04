@@ -11,7 +11,7 @@ def start_scheduler():
         trigger="cron",
         day_of_week="mon-fri",
         hour="9-15",
-        minute="*/1",
+        minute="*/5",
         second=9,
         id="ohlcv_feature_pipeline",
         max_instances=1,
