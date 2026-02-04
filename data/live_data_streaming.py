@@ -23,7 +23,7 @@ def onmessage(message):
     
     # Handle system messages (authentication, subscription, etc.)
     if 'symbol' not in message:
-        print(f"System message: {message.get('message', 'Unknown')}")
+        # print(f"System message: {message.get('message', 'Unknown')}")
         return
     
     full_symbol = message['symbol']
@@ -32,7 +32,7 @@ def onmessage(message):
     
     # Handle cold start - database empty
     if row is None:
-        print(f"No data available for {ticker} yet. Skipping...")
+        # print(f"No data available for {ticker} yet. Skipping...")
         return
     
     ltp = message['ltp']
@@ -44,10 +44,9 @@ def onmessage(message):
     rsi = row["rsi_14"]
     
     if ltp <= support:
-        trigger_long(ltp, ma20, ma50, ma200, rsi, ticker)
+        trigger_long(ltp, ma20, ma50, ma200, rsi, ticker, support, resistance, row['ml_prediction'], row['ml_confidence'])
     elif ltp >= resistance:
-        trigger_short(ltp, ma20, ma50, ma200, rsi, ticker)
-    else:
+        trigger_short(ltp, ma20, ma50, ma200, rsi, ticker, support, resistance, row['ml_prediction'], row['ml_confidence'])
         print("No Trigger yet")
     
     print(f"{ticker} | {row['ml_prediction']} | {row['ml_confidence']:.2%} | {ltp} | {support} | {resistance}")
